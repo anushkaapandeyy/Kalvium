@@ -1,26 +1,13 @@
 const express = require("express");
 const app = express();
 const fs = require('fs');
+const math = require('mathjs');
 
 const operationHistory = loadHistory();
 
 
 app.use(express.urlencoded({ extended: true }));
 
-const performOperation = (num1, operator, num2) => {
-    switch (operator) {
-        case 'plus':
-            return num1 + num2;
-        case 'minus':
-            return num1 - num2;
-        case 'into':
-            return num1 * num2;
-        case 'divide':
-            return num1 / num2;
-        default:
-            throw new Error('Invalid operator.');
-    }
-};
 function saveHistory() {
     fs.writeFileSync('operation-history.json', JSON.stringify(operationHistory));
 }
@@ -34,19 +21,23 @@ function loadHistory() {
     }
 }
 
-app.get('/:num1/:operator/:num2', (req, res) => {
-    const num1 = parseFloat(req.params.num1);
-    const operator = req.params.operator;
-    const num2 = parseFloat(req.params.num2);
-
-    if (isNaN(num1) || isNaN(num2)) {
-        return res.status(400).send('Invalid numbers.');
-    }
-
+app.get('/history', (req, res) => {
+    res.json(operationHistory);
+});
+app.get('/:first*', (req, res) => {
+    console.log(req.params)
+    first = req.params.first
+    exp = req.params['0']
+    exp = first + exp
+    exp = exp
+        .replace(new RegExp('/', 'g'), '')
+        .replace(/plus/g, '+')
+        .replace(/minus/g, '-')
+        .replace(/into/g, '*')
+        .replace(/over/g, '/')
     try {
-        const result = performOperation(num1, operator, num2);
-        const expression = `${num1} ${operator} ${num2}`;
-        const response = { expression, result };
+        const result = math.evaluate(exp);
+        const response = { exp, result };
 
         operationHistory.push(response);
 
@@ -60,10 +51,6 @@ app.get('/:num1/:operator/:num2', (req, res) => {
     }
     saveHistory();
     res.json(response);
-});
-// Route to get the history of operations
-app.get('/history', (req, res) => {
-    res.json(operationHistory);
 });
 
 app.get('/', (req, res) => {
