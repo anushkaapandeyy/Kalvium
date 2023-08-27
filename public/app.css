@@ -1,0 +1,14 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: blue;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+/* Add more CSS rules as needed */

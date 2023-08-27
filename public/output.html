@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation History Display</title>
+    <style>
+        /* Add your CSS styles here */
+        .history-item {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f7f7f7;
+        }
+
+        .history-item h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .history-item pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Operation History Display</h1>
+    <div id="history-container"></div>
+
+    <script>
+        // Fetch operation history data from the server
+        fetch('/history-json')
+            .then(response => response.json())
+            .then(historyData => {
+                const historyContainer = document.getElementById('history-container');
+
+                historyData.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.classList.add('history-item');
+
+                    const expressionHeader = document.createElement('h3');
+                    expressionHeader.textContent = 'Expression:';
+                    const expressionPre = document.createElement('pre');
+                    expressionPre.textContent = JSON.stringify(item.exp, null, 2);
+
+                    const resultHeader = document.createElement('h3');
+                    resultHeader.textContent = 'Result:';
+                    const resultPre = document.createElement('pre');
+                    resultPre.textContent = JSON.stringify(item.result, null, 2);
+
+                    historyItem.appendChild(expressionHeader);
+                    historyItem.appendChild(expressionPre);
+                    historyItem.appendChild(resultHeader);
+                    historyItem.appendChild(resultPre);
+
+                    historyContainer.appendChild(historyItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching history data:', error);
+            });
+    </script>
+</body>
+
+</html>

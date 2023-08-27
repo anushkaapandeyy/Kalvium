@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Page</title>
+    <style>
+        /* Add your CSS styles here */
+        /* ... */
+    </style>
+</head>
+
+<body>
+    <div class="result-container">
+        <h1>Result</h1>
+        <p>The calculated result is: <span id="result"></span></p>
+    </div>
+
+    <script>
+        // Get the result parameter from the URL query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const result = urlParams.get('result');
+
+        // Display the result in the span element
+        const resultSpan = document.getElementById('result');
+        resultSpan.textContent = result;
+    </script>
+</body>
+
+</html>
